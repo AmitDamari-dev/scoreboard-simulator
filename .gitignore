@@ -1,0 +1,27 @@
+# Visual Studio build output and user state
+.vs/
+x64/
+x86/
+Debug/
+Release/
+*.user
+*.suo
+*.ilk
+*.pdb
+*.obj
+*.idb
+*.ipch
+*.tlog
+*.log
+*.lastbuildstate
+*.recipe
+*.VC.db
+*.VC.opendb
+
+# Course PDF (not redistributed)
+*.pdf
+
+# Do not ignore test outputs: tests/*/ must ship with their output files
+
+# Local Claude Code settings
+.claude/
