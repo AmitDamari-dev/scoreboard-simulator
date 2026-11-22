@@ -1,12 +1,5 @@
-/*
- * isa.c
- *
- * Decode a 32-bit word and look up its opcode mnemonic and execution unit.
- */
-
 #include "isa.h"
 
-/* Mnemonic and functional unit associated with an opcode. */
 typedef struct {
     const char *name;
     UnitType unit_type;

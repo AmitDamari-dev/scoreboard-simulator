@@ -1,9 +1,3 @@
-/*
- * config.c
- *
- * Parse required settings and validate the selected trace unit.
- */
-
 #include "config.h"
 
 #include <ctype.h>
@@ -13,7 +7,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* Unit name prefix and the two configuration keys for its type. */
 typedef struct {
     const char *name;
     const char *count_key;
@@ -29,14 +22,13 @@ static const UnitInfo unit_info[UNIT_TYPE_COUNT] = {
     [UNIT_ST] = { "ST", "st_nr_units", "st_delay" }
 };
 
-/* Outcomes of reading one config line, including a final line without a newline. */
 typedef enum {
     LINE_OK,
     LINE_EOF,
     LINE_ERROR
 } LineStatus;
 
-/* Grow the reusable buffer so spacing and comments have no fixed length limit. */
+// Grow the line buffer dynamically so long comments or whitespace don't truncate lines.
 static LineStatus read_line(FILE *file, char **line, size_t *capacity, const char **error)
 {
     size_t used = 0;
@@ -76,7 +68,6 @@ static LineStatus read_line(FILE *file, char **line, size_t *capacity, const cha
     }
 }
 
-/* Strip leading and trailing whitespace from a mutable string. */
 static char *trim(char *text)
 {
     while (isspace((unsigned char)*text)) {
@@ -90,7 +81,6 @@ static char *trim(char *text)
     return text;
 }
 
-/* Accept one base-10 integer in [minimum, INT_MAX]. */
 static bool parse_int(const char *text, int minimum, int *value)
 {
     char *end;
@@ -136,7 +126,7 @@ bool config_format_unit_name(UnitRef unit, char *buffer, size_t buffer_size)
     return written >= 0 && (size_t)written < buffer_size;
 }
 
-/* Assign a numeric setting once. A negative field marks a missing value. */
+// Negative fields mark parameters that have not been seen yet.
 static const char *set_number(int *field, const char *value, int minimum)
 {
     if (*field >= 0) {
@@ -149,7 +139,6 @@ static const char *set_number(int *field, const char *value, int minimum)
     return NULL;
 }
 
-/* Assign a known key and return an error message if its value is invalid. */
 static const char *set_parameter(Config *config, const char *key, char *value)
 {
     if (strcmp(key, "trace_unit") == 0) {
@@ -177,7 +166,6 @@ static const char *set_parameter(Config *config, const char *key, char *value)
     return "unknown parameter";
 }
 
-/* Remove comments and parse a single assignment, if present. */
 static bool parse_line(Config *config, char *line, const char *path, size_t line_number)
 {
     char *comment = strchr(line, '#');
@@ -203,7 +191,7 @@ static bool parse_line(Config *config, char *line, const char *path, size_t line
     return true;
 }
 
-/* Require every key and check the selected index after all counts are known. */
+// Trace index validation runs after all unit counts are parsed since cfg order can vary.
 static bool validate_config(const Config *config, const char *path)
 {
     for (int type = UNIT_ADD; type < UNIT_TYPE_COUNT; ++type) {

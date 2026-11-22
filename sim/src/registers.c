@@ -1,9 +1,3 @@
-/*
- * registers.c
- *
- * Store register values and pending writers, and dump the values to regout.txt.
- */
-
 #include "registers.h"
 
 #include <stdio.h>

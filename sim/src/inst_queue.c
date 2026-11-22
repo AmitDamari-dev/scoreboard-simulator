@@ -1,9 +1,3 @@
-/*
- * inst_queue.c
- *
- * Store fetched words in a fixed-size FIFO for Issue.
- */
-
 #include "inst_queue.h"
 
 void iq_init(InstQueue *queue)

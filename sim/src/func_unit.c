@@ -1,14 +1,7 @@
-/*
- * func_unit.c
- *
- * Allocate functional units from a configuration and manage their instruction state.
- */
-
 #include "func_unit.h"
 
 #include <stdlib.h>
 
-/* Check whether a type can index the per-type arrays. */
 static bool valid_type(UnitType type)
 {
     return type >= UNIT_ADD && type < UNIT_TYPE_COUNT;
@@ -77,6 +70,7 @@ FuncUnit *fu_get(FuncUnitPool *pool, UnitRef ref)
 
 void fu_clear(FuncUnit *unit)
 {
+    // Preserve unit identity and configured delay across instructions.
     *unit = (FuncUnit){
         .ref = unit->ref,
         .delay = unit->delay,

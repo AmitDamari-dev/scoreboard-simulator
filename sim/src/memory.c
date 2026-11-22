@@ -1,9 +1,3 @@
-/*
- * memory.c
- *
- * Load and dump memory images, access words, and convert between word and float bits.
- */
-
 #include "memory.h"
 
 #include <inttypes.h>
@@ -17,7 +11,6 @@ void mem_init(Memory *memory)
     memset(memory->data, 0, sizeof(memory->data));
 }
 
-/* Convert one hex digit to its value, or return -1 for any other byte. */
 static int hex_digit(int ch)
 {
     if (ch >= '0' && ch <= '9') {
@@ -32,7 +25,7 @@ static int hex_digit(int ch)
     return -1;
 }
 
-/* Read exactly eight hex digits and consume LF, CRLF, or final EOF. */
+// Read 8 hex digits followed by LF, CRLF, or EOF on the final line.
 static bool read_hex_word(FILE *file, int ch, uint32_t *word)
 {
     uint32_t value = 0;
@@ -64,6 +57,7 @@ bool mem_load(Memory *memory, const char *path)
         return false;
     }
 
+    // Load into a temporary image so a malformed file leaves *memory intact.
     Memory loaded;
     mem_init(&loaded);
     unsigned int address = 0;
