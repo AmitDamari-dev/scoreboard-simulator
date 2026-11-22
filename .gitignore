@@ -22,6 +22,3 @@ Release/
 *.pdf
 
 # Do not ignore test outputs: tests/*/ must ship with their output files
-
-# Local Claude Code settings
-.claude/
